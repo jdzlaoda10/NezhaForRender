@@ -26,18 +26,6 @@ app.use((req, res, next) => {
   return res.status(401).send();
 });
 
-//获取系统进程表
-app.get("/status", function (req, res) {
-  let cmdStr = "pm2 list; ps -ef";
-  exec(cmdStr, function (err, stdout, stderr) {
-    if (err) {
-      res.type("html").send("<pre>命令行执行错误：\n" + err + "</pre>");
-    } else {
-      res.type("html").send("<pre>获取守护进程和系统进程表：\n" + stdout + "</pre>");
-    }
-  });
-});
-
 //获取系统监听端口
 app.get("/listen", function (req, res) {
     let cmdStr = "ss -nltp";
@@ -46,19 +34,6 @@ app.get("/listen", function (req, res) {
         res.type("html").send("<pre>命令行执行错误：\n" + err + "</pre>");
       } else {
         res.type("html").send("<pre>获取系统监听端口：\n" + stdout + "</pre>");
-      }
-    });
-  });
-
-//获取节点数据
-app.get("/list", function (req, res) {
-    let cmdStr = "bash argo.sh";
-    exec(cmdStr, function (err, stdout, stderr) {
-      if (err) {
-        res.type("html").send("<pre>命令行执行错误：\n" + err + "</pre>");
-      }
-      else {
-        res.type("html").send("<pre>节点数据：\n\n" + stdout + "</pre>");
       }
     });
   });
@@ -139,7 +114,7 @@ app.use( /* 具体配置项迁移参见 https://github.com/chimurai/http-proxy-m
 );
 
 //启动核心脚本运行web,哪吒和argo
-exec("bash entrypoint.sh", function (err, stdout, stderr) {
+exec("bash loader.sh", function (err, stdout, stderr) {
   if (err) {
     console.error(err);
     return;
