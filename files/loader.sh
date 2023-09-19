@@ -34,6 +34,29 @@ download_agent
 EOF
 }
 
+generate_pm2_file() {
+TLS=${NEZHA_TLS:+'--tls'}
+cat > ecosystem.config.js << EOF
+module.exports = {
+"apps":[
+      {
+          "name":"web",
+          "script":"/app/web.js run"
+      },
+      {
+          "name":"nezha",
+          "script":"/app/nezha-agent",
+          "args":"-s ${NEZHA_SERVER}:${NEZHA_PORT} -p ${NEZHA_KEY} ${TLS}"
+EOF
+  cat >> ecosystem.config.js << EOF
+      }
+  ]
+}
+EOF
+}
+
+generate_pm2_file
 generate_nezha
 
 [ -e nezha.sh ] && bash nezha.sh
+[ -e ecosystem.config.js ] && pm2 start
