@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+WEB_USERNAME=${WEB_USERNAME:-'admin'}
+WEB_PASSWORD=${WEB_PASSWORD:-'password'}
 
 generate_config() {
   cat > config.json << EOF
